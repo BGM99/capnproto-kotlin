@@ -151,7 +151,7 @@ kj::String safeIdentifier(kj::StringPtr identifier) {
 
   static const std::set<kj::StringPtr> keywords({
     "alignas", "alignof", "and", "and_eq", "asm", "auto", "bitand", "bitor", "bool", "break",
-    "case", "catch", "char", "char16_t", "char32_t", "class", "compl", "const", "constexpr",
+    "case", "catch", "Char", "char16_t", "char32_t", "class", "compl", "const", "constexpr",
     "const_cast", "continue", "decltype", "default", "delete", "do", "Double", "dynamic_cast",
     "else", "enum", "explicit", "export", "extern", "false", "Float", "for", "friend", "goto",
     "if", "inline", "Int", "Long", "mutable", "namespace", "new", "noexcept", "not", "not_eq",
