@@ -157,7 +157,7 @@ kj::String safeIdentifier(kj::StringPtr identifier) {
     "if", "inline", "Int", "Long", "mutable", "namespace", "new", "noexcept", "not", "not_eq",
     "nullptr", "operator", "or", "or_eq", "private", "protected", "public", "register",
     "reinterpret_cast", "return", "Short", "signed", "sizeof", "static", "static_assert",
-    "static_cast", "struct", "switch", "template", "this", "thread_local", "throw", "true",
+    "static_cast", "struct", "when", "template", "this", "thread_local", "throw", "true",
     "try", "typedef", "typeid", "typename", "union", "unsigned", "using", "virtual", "Unit",
     "volatile", "wchar_t", "while", "xor", "xor_eq"
   });
@@ -717,13 +717,13 @@ private:
   kj::StringTree makeEnumGetter(EnumSchema schema, uint offset, kj::String defaultMaskParam, int indent) {
     auto enumerants = schema.getEnumerants();
     return kj::strTree(
-      spaces(indent), "switch(_getShortField(", offset, defaultMaskParam, ")) {\n",
+      spaces(indent), "when (_getShortField(", offset, defaultMaskParam, ")) {\n",
       KJ_MAP(e, enumerants) {
-        return kj::strTree(spaces(indent+1), "case ", e.getOrdinal(), " : return ",
+        return kj::strTree(spaces(indent+1), e.getOrdinal(), " -> ",
                            javaFullName(schema), ".",
-                           toUpperCase(e.getProto().getName()), ";\n");
+                           toUpperCase(e.getProto().getName()), "\n");
       },
-      spaces(indent+1), "default: return ", javaFullName(schema), "._NOT_IN_SCHEMA;\n",
+      spaces(indent+1), "else -> ", javaFullName(schema), "._NOT_IN_SCHEMA\n",
       spaces(indent), "}\n"
       );
   }
@@ -1329,14 +1329,14 @@ private:
       auto fields = schema.getUnionFields();
       return kj::strTree(
         spaces(indent), "public Which which() {\n",
-        spaces(indent+1), "switch(_getShortField(",
+        spaces(indent+1), "when (_getShortField(",
         schema.getProto().getStruct().getDiscriminantOffset(), ")) {\n",
         KJ_MAP(f, fields) {
-          return kj::strTree(spaces(indent+2), "case ", f.getProto().getDiscriminantValue(), " : return ",
+          return kj::strTree(spaces(indent+2), f.getProto().getDiscriminantValue(), " -> ",
                              "Which.",
-                             toUpperCase(f.getProto().getName()), ";\n");
+                             toUpperCase(f.getProto().getName()), "\n");
         },
-        spaces(indent+2), "default: return Which._NOT_IN_SCHEMA;\n",
+        spaces(indent+2), "default: return Which._NOT_IN_SCHEMA\n",
         spaces(indent+1), "}\n",
         spaces(indent), "}\n"
         );
