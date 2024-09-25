@@ -1027,7 +1027,7 @@ private:
       return FieldText {
         kj::strTree(
             kj::mv(unionDiscrim.readerIsDef),
-            spaces(indent), "  public Boolean has", titleCase, "() {\n",
+            spaces(indent), "  fun has", titleCase, "(): Boolean {\n",
             unionDiscrim.has,
             spaces(indent), "    return !_pointerFieldIsNull(", offset, ")\n",
             spaces(indent), "  }\n",
@@ -1039,7 +1039,7 @@ private:
 
         kj::strTree(
             kj::mv(unionDiscrim.builderIsDef),
-            spaces(indent), "  public final Boolean has", titleCase, "() {\n",
+            spaces(indent), "  fun has", titleCase, "(): Boolean {\n",
             spaces(indent), "    return !_pointerFieldIsNull(", offset, ")\n",
             spaces(indent), "  }\n",
 
@@ -1081,7 +1081,7 @@ private:
       return FieldText {
         kj::strTree(
           kj::mv(unionDiscrim.readerIsDef),
-          spaces(indent), "  public Boolean has", titleCase, "() {\n",
+          spaces(indent), "  fun has", titleCase, "(): Boolean {\n",
           spaces(indent), "    return !_pointerFieldIsNull(", offset, ")\n",
           spaces(indent), "  }\n",
 
@@ -1141,7 +1141,7 @@ private:
       return FieldText {
         kj::strTree(
           kj::mv(unionDiscrim.readerIsDef),
-          spaces(indent), "  public Boolean has", titleCase, "() {\n",
+          spaces(indent), "  fun has", titleCase, "(): Boolean {\n",
           unionDiscrim.has,
           spaces(indent), "    return !_pointerFieldIsNull(", offset, ")\n",
           spaces(indent), "  }\n",
@@ -1154,7 +1154,7 @@ private:
 
         kj::strTree(
           kj::mv(unionDiscrim.builderIsDef),
-          spaces(indent), "  public final Boolean has", titleCase, "() {\n",
+          spaces(indent), "  fun has", titleCase, "(): Boolean {\n",
           unionDiscrim.has,
           spaces(indent), "    return !_pointerFieldIsNull(", offset, ")\n",
           spaces(indent), "  }\n",
@@ -1201,7 +1201,7 @@ private:
       return FieldText {
         kj::strTree(
             kj::mv(unionDiscrim.readerIsDef),
-            spaces(indent), "  public final Boolean has", titleCase, "() {\n",
+            spaces(indent), "  fun has", titleCase, "(): Boolean {\n",
             spaces(indent), "    return !_pointerFieldIsNull(", offset, ")\n",
             spaces(indent), "  }\n",
 
@@ -1231,7 +1231,7 @@ private:
 
         kj::strTree(
             kj::mv(unionDiscrim.builderIsDef),
-            spaces(indent), "  public final Boolean has", titleCase, "() {\n",
+            spaces(indent), "  fun has", titleCase, "(): Boolean {\n",
             spaces(indent), "    return !_pointerFieldIsNull(", offset, ")\n",
             spaces(indent), "  }\n",
 
