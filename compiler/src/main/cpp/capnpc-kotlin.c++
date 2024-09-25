@@ -154,7 +154,7 @@ kj::String safeIdentifier(kj::StringPtr identifier) {
     "case", "catch", "Char", "char16_t", "char32_t", "class", "compl", "const", "constexpr",
     "const_cast", "continue", "decltype", "default", "delete", "do", "Double", "dynamic_cast",
     "else", "enum", "explicit", "export", "extern", "false", "Float", "for", "friend", "goto",
-    "if", "inline", "Int", "Long", "mutable", "namespace", "new", "noexcept", "not", "not_eq",
+    "if", "inline", "Int", "Long", "mutable", "namespace", "noexcept", "not", "not_eq",
     "nullptr", "operator", "or", "or_eq", "private", "protected", "public", "register",
     "reinterpret_cast", "return", "Short", "signed", "sizeof", "static", "static_assert",
     "static_cast", "struct", "when", "template", "this", "thread_local", "throw", "true",
@@ -772,7 +772,7 @@ private:
         if (elementNode.getIsGeneric()) {
           auto factoryArgs = getFactoryArguments(elementStructSchema, elementStructSchema);
           return kj::strTree(
-            "new org.capnproto.StructList.Factory<",
+            "org.capnproto.StructList.Factory<",
             typeName(elementType, kj::str("Builder")), ", ",
             typeName(elementType, kj::str("Reader")),
             ">(",
@@ -788,13 +788,13 @@ private:
         }
       }
       case schema::Type::LIST:
-        return kj::str("new org.capnproto.ListList.Factory<",
+        return kj::str("org.capnproto.ListList.Factory<",
                        typeName(elementType, kj::str("Builder")),", ",
                        typeName(elementType, kj::str("Reader")), ">(",
                        makeFactoryArg(elementType),
                        ")");
       case schema::Type::ENUM:
-        return kj::str("new org.capnproto.EnumList.Factory<",
+        return kj::str("org.capnproto.EnumList.Factory<",
                        typeName(elementType), ">(",
                        typeName(elementType, kj::str("")),
                        ".values())");
@@ -829,7 +829,7 @@ private:
           kj::strTree(
             kj::mv(unionDiscrim.readerIsDef),
             spaces(indent), "  public ", titleCase, ".Reader get", titleCase, "() {\n",
-            spaces(indent), "    return new ", scope, titleCase,
+            spaces(indent), "    return ", scope, titleCase,
             ".Reader(segment, data, pointers, dataSize, pointerCount, nestingLimit);\n",
             spaces(indent), "  }\n",
             "\n"),
@@ -837,7 +837,7 @@ private:
             kj::strTree(
               kj::mv(unionDiscrim.builderIsDef),
               spaces(indent), "  public final ", titleCase, ".Builder get", titleCase, "() {\n",
-              spaces(indent), "    return new ", scope, titleCase,
+              spaces(indent), "    return ", scope, titleCase,
               ".Builder(segment, data, pointers, dataSize, pointerCount);\n",
               spaces(indent), "  }\n",
               spaces(indent), "  public final ", titleCase, ".Builder init", titleCase, "() {\n",
@@ -858,7 +858,7 @@ private:
                 }
                 KJ_UNREACHABLE;
               },
-              "  return new ", scope, titleCase,
+              "  return ", scope, titleCase,
               ".Builder(segment, data, pointers, dataSize, pointerCount);\n",
               spaces(indent), "  }\n",
               "\n")
@@ -1168,7 +1168,7 @@ private:
           spaces(indent), "  }\n",
           spaces(indent), "  public final Unit set", titleCase, "(", setterInputType, " value) {\n",
           unionDiscrim.set,
-          spaces(indent), "    _setPointerField(", factory, ", ", offset, ", new ",
+          spaces(indent), "    _setPointerField(", factory, ", ", offset, ", ",
           readerType, "(value));\n",
           spaces(indent), "  }\n",
 
@@ -1398,7 +1398,7 @@ private:
         spaces(indent), "public static class ", name, " {\n",
         kj::strTree(
           spaces(indent), "  public static final org.capnproto.StructSize STRUCT_SIZE =",
-          " new org.capnproto.StructSize((Short)", structNode.getDataWordCount(),
+          " org.capnproto.StructSize((Short)", structNode.getDataWordCount(),
           ",(Short)", structNode.getPointerCount(), ");\n"),
 
         spaces(indent), "  public static final class Factory", factoryTypeParams,
@@ -1415,7 +1415,7 @@ private:
         spaces(indent),
         "    public final Reader", readerTypeParams, " constructReader(org.capnproto.SegmentReader segment, Int data,",
         "Int pointers, Int dataSize, Short pointerCount, Int nestingLimit) {\n",
-        spaces(indent), "      return new Reader", readerTypeParams, "(",
+        spaces(indent), "      return Reader", readerTypeParams, "(",
         KJ_MAP(p, typeParamVec) {
           return kj::strTree(p, "_Factory, ");
         },
@@ -1423,7 +1423,7 @@ private:
         spaces(indent), "    }\n",
         spaces(indent), "    public final Builder", builderTypeParams, " constructBuilder(org.capnproto.SegmentBuilder segment, Int data,",
         "Int pointers, Int dataSize, Short pointerCount) {\n",
-        spaces(indent), "      return new Builder", builderTypeParams, "(",
+        spaces(indent), "      return Builder", builderTypeParams, "(",
         KJ_MAP(p, typeParamVec) {
           return kj::strTree(p, "_Factory, ");
         },
@@ -1443,7 +1443,7 @@ private:
          kj::strTree(
            spaces(indent), "  public static final ", factoryTypeParams, "Factory", factoryTypeParams, "\n",
            spaces(indent), "    newFactory(", factoryArgs.flatten(), "){\n",
-           spaces(indent), "   return new Factory", factoryTypeParams, "(",
+           spaces(indent), "   return Factory", factoryTypeParams, "(",
            kj::StringTree(KJ_MAP(p, typeParamVec) {
                return kj::strTree(p, "_Factory");
              }, ", "),
@@ -1451,9 +1451,9 @@ private:
            spaces(indent), "  }\n"
            ) :
          kj::strTree(
-           spaces(indent), "  public static final Factory factory = new Factory();\n",
+           spaces(indent), "  public static final Factory factory = Factory();\n",
            spaces(indent), "  public static final org.capnproto.StructList.Factory<Builder,Reader> listFactory =\n",
-           spaces(indent), "    new org.capnproto.StructList.Factory<Builder, Reader>(factory);\n")),
+           spaces(indent), "    org.capnproto.StructList.Factory<Builder, Reader>(factory);\n")),
 
         kj::strTree(
           spaces(indent+1), "public static final class Builder", builderTypeParams, " : org.capnproto.StructBuilder {\n",
@@ -1477,7 +1477,7 @@ private:
            kj::strTree(name, ".Factory", factoryTypeParams, " factory")
             ),
           ") {\n",
-          spaces(indent+1), "    return new Reader", readerTypeParams, "(",
+          spaces(indent+1), "    return Reader", readerTypeParams, "(",
           KJ_MAP(p, typeParamVec) {
             return kj::strTree("factory.", p, "_Factory, ");
           },
@@ -1572,7 +1572,7 @@ private:
           true,
           kj::strTree(spaces(indent),
                       "public static final org.capnproto.Text.Reader ", upperCase,
-                      " = new org.capnproto.Text.Reader(Schemas.b_",
+                      " = org.capnproto.Text.Reader(Schemas.b_",
                       kj::hex(proto.getId()), ".buffer, ", schema.getValueSchemaOffset(),
                       ", ", constProto.getValue().getText().size(), ");\n")
         };
@@ -1583,7 +1583,7 @@ private:
           true,
           kj::strTree(spaces(indent),
                       "public static final org.capnproto.Data.Reader ", upperCase,
-                      " = new org.capnproto.Data.Reader(Schemas.b_",
+                      " = org.capnproto.Data.Reader(Schemas.b_",
                       kj::hex(proto.getId()), ".buffer, ", schema.getValueSchemaOffset(),
                       ", ", constProto.getValue().getData().size(), ");\n")
         };
@@ -1595,7 +1595,7 @@ private:
             kj::strTree(spaces(indent),
                         "public static final ", typeName_, " ", upperCase, " =\n",
                         spaces(indent), "  ",
-                        "new org.capnproto.AnyPointer.Reader(Schemas.b_",
+                        " org.capnproto.AnyPointer.Reader(Schemas.b_",
                         kj::hex(proto.getId()), ",", schema.getValueSchemaOffset(), ",0x7fffffff).getAs(",
                         makeFactoryArg(type), ");\n")
         };
@@ -1608,7 +1608,7 @@ private:
             spaces(indent),
             "public static final ", typeName_, ' ', upperCase, " =\n",
             spaces(indent), " (",
-            "new org.capnproto.AnyPointer.Reader(Schemas.b_",
+            "org.capnproto.AnyPointer.Reader(Schemas.b_",
             kj::hex(proto.getId()), ",", schema.getValueSchemaOffset(), ",0x7fffffff).getAs(",
             makeFactoryArg(type), "));\n")
         };
