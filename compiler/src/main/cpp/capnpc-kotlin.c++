@@ -154,7 +154,7 @@ kj::String safeIdentifier(kj::StringPtr identifier) {
     "case", "catch", "char", "char16_t", "char32_t", "class", "compl", "const", "constexpr",
     "const_cast", "continue", "decltype", "default", "delete", "do", "double", "dynamic_cast",
     "else", "enum", "explicit", "export", "extern", "false", "float", "for", "friend", "goto",
-    "if", "inline", "Int", "long", "mutable", "namespace", "new", "noexcept", "not", "not_eq",
+    "if", "inline", "Int", "Long", "mutable", "namespace", "new", "noexcept", "not", "not_eq",
     "nullptr", "operator", "or", "or_eq", "private", "protected", "public", "register",
     "reinterpret_cast", "return", "Short", "signed", "sizeof", "static", "static_assert",
     "static_cast", "struct", "switch", "template", "this", "thread_local", "throw", "true",
@@ -299,11 +299,11 @@ private:
     case schema::Type::INT8: return kj::strTree("byte");
     case schema::Type::INT16: return kj::strTree("Short");
     case schema::Type::INT32: return kj::strTree("Int");
-    case schema::Type::INT64: return kj::strTree("long");
+    case schema::Type::INT64: return kj::strTree("Long");
     case schema::Type::UINT8: return kj::strTree("byte");
     case schema::Type::UINT16: return kj::strTree("Short");
     case schema::Type::UINT32: return kj::strTree("Int");
-    case schema::Type::UINT64: return kj::strTree("long");
+    case schema::Type::UINT64: return kj::strTree("Long");
     case schema::Type::FLOAT32: return kj::strTree("float");
     case schema::Type::FLOAT64: return kj::strTree("double");
 
@@ -498,13 +498,13 @@ private:
       case schema::Type::INT8: return "byte";
       case schema::Type::INT16: return "Short";
       case schema::Type::INT32: return "Int";
-      case schema::Type::INT64: return "long";
+      case schema::Type::INT64: return "Long";
       case schema::Type::UINT8: return "byte";
       case schema::Type::UINT16: return "Short";
       case schema::Type::UINT32: return "Int";
-      case schema::Type::UINT64: return "long";
+      case schema::Type::UINT64: return "Long";
       case schema::Type::FLOAT32: return "Int";
-      case schema::Type::FLOAT64: return "long";
+      case schema::Type::FLOAT64: return "Long";
       case schema::Type::ENUM: return "Short";
 
       case schema::Type::VOID:
@@ -895,11 +895,11 @@ private:
         HANDLE_PRIMITIVE(INT8 , ::int8_t , byte, Int8 , );
         HANDLE_PRIMITIVE(INT16, ::int16_t, Short, Int16, );
         HANDLE_PRIMITIVE(INT32, ::int32_t, Int, Int32, );
-        HANDLE_PRIMITIVE(INT64, ::int64_t, long, Int64, L);
+        HANDLE_PRIMITIVE(INT64, ::int64_t, Long, Int64, L);
         HANDLE_PRIMITIVE(UINT8 , ::int8_t , byte, Uint8 , );
         HANDLE_PRIMITIVE(UINT16, ::int16_t, Short, Uint16, );
         HANDLE_PRIMITIVE(UINT32, ::int32_t, Int, Uint32, );
-        HANDLE_PRIMITIVE(UINT64, ::int64_t, long, Uint64, L);
+        HANDLE_PRIMITIVE(UINT64, ::int64_t, Long, Uint64, L);
 #undef HANDLE_PRIMITIVE
 
       case schema::Type::FLOAT32:
