@@ -1135,7 +1135,7 @@ private:
         "Schemas.b_", kj::hex(typeId), ".buffer, ", defaultOffset, ", ", defaultSize);
 
       kj::String blobKind =  typeBody.which() == schema::Type::TEXT ? kj::str("Text") : kj::str("Data");
-      kj::String setterInputType = typeBody.which() == schema::Type::TEXT ? kj::str("String") : kj::str("Byte []");
+      kj::String setterInputType = typeBody.which() == schema::Type::TEXT ? kj::str("String") : kj::str("ByteArray");
       kj::String factory = kj::str("org.capnproto.", kj::str(blobKind), ".factory");
 
       return FieldText {
