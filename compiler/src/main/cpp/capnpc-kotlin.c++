@@ -840,7 +840,7 @@ private:
               spaces(indent), "    return ", scope, titleCase,
               ".Builder(segment, data, pointers, dataSize, pointerCount)\n",
               spaces(indent), "  }\n",
-              spaces(indent), "  public final ", titleCase, ".Builder init", titleCase, "() {\n",
+              spaces(indent), "  fun init", titleCase, "(): ", titleCase, ".Builder {\n",
               unionDiscrim.set,
               KJ_MAP(slot, slots) {
                 switch (sectionFor(slot.whichType)) {
@@ -1048,12 +1048,12 @@ private:
             spaces(indent), "    return _getPointerField(", factoryArg, ", ", offset, ")\n",
             spaces(indent), "  }\n",
 
-            spaces(indent), "  public ", builderType, " init", titleCase, "() {\n",
+            spaces(indent), "  fun init", titleCase, "(): ", builderType, " {\n",
             unionDiscrim.set,
             spaces(indent), "    return _initPointerField(", factoryArg, ", ", offset, ", 0)\n",
             spaces(indent), "  }\n",
 
-            spaces(indent), "  public ", builderType, " init", titleCase, "(Int size) {\n",
+            spaces(indent), "  fun init", titleCase, "(size: Int): ", builderType, " {\n",
             unionDiscrim.set,
             spaces(indent), "    return _initPointerField(", factoryArg, ", ", offset, ", size)\n",
             spaces(indent), "  }\n",
@@ -1121,7 +1121,7 @@ private:
              spaces(indent), "    _setPointerField(", factoryArg, ",", offset, ", value)\n",
              spaces(indent), "  }\n")),
 
-          spaces(indent), "  public final ", builderType, " init", titleCase, "() {\n",
+          spaces(indent), "  fun init", titleCase, "(): ", builderType, " {\n",
           unionDiscrim.set,
           spaces(indent), "    return ",
           "_initPointerField(", factoryArg, ",",  offset, ", 0)\n",
@@ -1172,7 +1172,7 @@ private:
           readerType, "(value))\n",
           spaces(indent), "  }\n",
 
-          spaces(indent), "  public final ", builderType, " init", titleCase, "(Int size) {\n",
+          spaces(indent), "  fun init", titleCase, "(size: Int): ", builderType, " {\n",
           unionDiscrim.set,
           spaces(indent), "    return _initPointerField(", factory, ", ", offset, ", size)\n",
           spaces(indent), "  }\n"),
@@ -1284,23 +1284,23 @@ private:
 
             (isGeneric ?
              kj::strTree(
-               spaces(indent), "  public final ",
+               spaces(indent), "  fun init", titleCase,
+               "(factory: org.capnproto.ListFactory<", builderType, ", ", readerType, ">, size: Int): ",
                (typeParamVec.size() == 0 ? kj::strTree() :
                 kj::strTree(
-                  "<",
-                  kj::StringTree(KJ_MAP(p, typeParamVec) {
-                      return kj::strTree(p, "_Reader");
-                    }, ", "),
-                  "> ")),
+                        "<",
+                        kj::StringTree(KJ_MAP(p, typeParamVec) {
+                            return kj::strTree(p, "_Reader");
+                        }, ", "),
+                        "> ")),
                builderType,
-               " init", titleCase, "( org.capnproto.ListFactory<", builderType, ", ", readerType, "> factory, Int size) {\n",
+               " {\n",
                unionDiscrim.set,
                spaces(indent), "    return _initPointerField(factory, ", offset, ", size)\n",
                spaces(indent), "  }\n"
                ) :
              kj::strTree(
-               spaces(indent), "  public final ", builderType,
-               " init", titleCase, "(Int size) {\n",
+               spaces(indent), "  fun init", titleCase, "(size: Int): ", builderType, " {\n",
                unionDiscrim.set,
                spaces(indent), "    return _initPointerField(", listFactory, ", ", offset, ", size)\n",
                spaces(indent), "  }\n")
