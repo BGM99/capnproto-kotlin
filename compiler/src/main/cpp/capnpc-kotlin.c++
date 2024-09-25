@@ -494,7 +494,7 @@ private:
 
   static kj::StringPtr maskType(schema::Type::Which whichType) {
     switch (whichType) {
-      case schema::Type::BOOL: return "boolean";
+      case schema::Type::BOOL: return "Boolean";
       case schema::Type::INT8: return "byte";
       case schema::Type::INT16: return "short";
       case schema::Type::INT32: return "Int";
@@ -689,10 +689,10 @@ private:
         kj::str(
           spaces(indent), "  _setShortField(", discrimOffset, ", (short)",
           scope, "Which.", upperCase, ".ordinal());\n"),
-          kj::strTree(spaces(indent), "public final boolean is", titleCase, "() {\n",
+          kj::strTree(spaces(indent), "public final Boolean is", titleCase, "() {\n",
                       spaces(indent), "  return which() == ", scope, "Which.", upperCase,";\n",
                       spaces(indent), "}\n"),
-          kj::strTree(spaces(indent), "public final boolean is", titleCase, "() {\n",
+          kj::strTree(spaces(indent), "public final Boolean is", titleCase, "() {\n",
                       spaces(indent), "  return which() == ", scope, "Which.", upperCase, ";\n",
                       spaces(indent), "}\n")
     };
@@ -891,7 +891,7 @@ private:
         } \
         break;
 
-        HANDLE_PRIMITIVE(BOOL, bool, boolean, Bool, );
+        HANDLE_PRIMITIVE(BOOL, bool, Boolean, Bool, );
         HANDLE_PRIMITIVE(INT8 , ::int8_t , byte, Int8 , );
         HANDLE_PRIMITIVE(INT16, ::int16_t, short, Int16, );
         HANDLE_PRIMITIVE(INT32, ::int32_t, Int, Int32, );
@@ -1027,7 +1027,7 @@ private:
       return FieldText {
         kj::strTree(
             kj::mv(unionDiscrim.readerIsDef),
-            spaces(indent), "  public boolean has", titleCase, "() {\n",
+            spaces(indent), "  public Boolean has", titleCase, "() {\n",
             unionDiscrim.has,
             spaces(indent), "    return !_pointerFieldIsNull(", offset, ");\n",
             spaces(indent), "  }\n",
@@ -1039,7 +1039,7 @@ private:
 
         kj::strTree(
             kj::mv(unionDiscrim.builderIsDef),
-            spaces(indent), "  public final boolean has", titleCase, "() {\n",
+            spaces(indent), "  public final Boolean has", titleCase, "() {\n",
             spaces(indent), "    return !_pointerFieldIsNull(", offset, ");\n",
             spaces(indent), "  }\n",
 
@@ -1081,7 +1081,7 @@ private:
       return FieldText {
         kj::strTree(
           kj::mv(unionDiscrim.readerIsDef),
-          spaces(indent), "  public boolean has", titleCase, "() {\n",
+          spaces(indent), "  public Boolean has", titleCase, "() {\n",
           spaces(indent), "    return !_pointerFieldIsNull(", offset, ");\n",
           spaces(indent), "  }\n",
 
@@ -1141,7 +1141,7 @@ private:
       return FieldText {
         kj::strTree(
           kj::mv(unionDiscrim.readerIsDef),
-          spaces(indent), "  public boolean has", titleCase, "() {\n",
+          spaces(indent), "  public Boolean has", titleCase, "() {\n",
           unionDiscrim.has,
           spaces(indent), "    return !_pointerFieldIsNull(", offset, ");\n",
           spaces(indent), "  }\n",
@@ -1154,7 +1154,7 @@ private:
 
         kj::strTree(
           kj::mv(unionDiscrim.builderIsDef),
-          spaces(indent), "  public final boolean has", titleCase, "() {\n",
+          spaces(indent), "  public final Boolean has", titleCase, "() {\n",
           unionDiscrim.has,
           spaces(indent), "    return !_pointerFieldIsNull(", offset, ");\n",
           spaces(indent), "  }\n",
@@ -1201,7 +1201,7 @@ private:
       return FieldText {
         kj::strTree(
             kj::mv(unionDiscrim.readerIsDef),
-            spaces(indent), "  public final boolean has", titleCase, "() {\n",
+            spaces(indent), "  public final Boolean has", titleCase, "() {\n",
             spaces(indent), "    return !_pointerFieldIsNull(", offset, ");\n",
             spaces(indent), "  }\n",
 
@@ -1231,7 +1231,7 @@ private:
 
         kj::strTree(
             kj::mv(unionDiscrim.builderIsDef),
-            spaces(indent), "  public final boolean has", titleCase, "() {\n",
+            spaces(indent), "  public final Boolean has", titleCase, "() {\n",
             spaces(indent), "    return !_pointerFieldIsNull(", offset, ");\n",
             spaces(indent), "  }\n",
 
