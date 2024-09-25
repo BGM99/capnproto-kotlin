@@ -154,7 +154,7 @@ kj::String safeIdentifier(kj::StringPtr identifier) {
     "case", "catch", "char", "char16_t", "char32_t", "class", "compl", "const", "constexpr",
     "const_cast", "continue", "decltype", "default", "delete", "do", "double", "dynamic_cast",
     "else", "enum", "explicit", "export", "extern", "false", "float", "for", "friend", "goto",
-    "if", "inline", "int", "long", "mutable", "namespace", "new", "noexcept", "not", "not_eq",
+    "if", "inline", "Int", "long", "mutable", "namespace", "new", "noexcept", "not", "not_eq",
     "nullptr", "operator", "or", "or_eq", "private", "protected", "public", "register",
     "reinterpret_cast", "return", "short", "signed", "sizeof", "static", "static_assert",
     "static_cast", "struct", "switch", "template", "this", "thread_local", "throw", "true",
@@ -298,11 +298,11 @@ private:
     case schema::Type::BOOL: return kj::strTree("boolean");
     case schema::Type::INT8: return kj::strTree("byte");
     case schema::Type::INT16: return kj::strTree("short");
-    case schema::Type::INT32: return kj::strTree("int");
+    case schema::Type::INT32: return kj::strTree("Int");
     case schema::Type::INT64: return kj::strTree("long");
     case schema::Type::UINT8: return kj::strTree("byte");
     case schema::Type::UINT16: return kj::strTree("short");
-    case schema::Type::UINT32: return kj::strTree("int");
+    case schema::Type::UINT32: return kj::strTree("Int");
     case schema::Type::UINT64: return kj::strTree("long");
     case schema::Type::FLOAT32: return kj::strTree("float");
     case schema::Type::FLOAT64: return kj::strTree("double");
@@ -497,13 +497,13 @@ private:
       case schema::Type::BOOL: return "boolean";
       case schema::Type::INT8: return "byte";
       case schema::Type::INT16: return "short";
-      case schema::Type::INT32: return "int";
+      case schema::Type::INT32: return "Int";
       case schema::Type::INT64: return "long";
       case schema::Type::UINT8: return "byte";
       case schema::Type::UINT16: return "short";
-      case schema::Type::UINT32: return "int";
+      case schema::Type::UINT32: return "Int";
       case schema::Type::UINT64: return "long";
-      case schema::Type::FLOAT32: return "int";
+      case schema::Type::FLOAT32: return "Int";
       case schema::Type::FLOAT64: return "long";
       case schema::Type::ENUM: return "short";
 
@@ -894,11 +894,11 @@ private:
         HANDLE_PRIMITIVE(BOOL, bool, boolean, Bool, );
         HANDLE_PRIMITIVE(INT8 , ::int8_t , byte, Int8 , );
         HANDLE_PRIMITIVE(INT16, ::int16_t, short, Int16, );
-        HANDLE_PRIMITIVE(INT32, ::int32_t, int, Int32, );
+        HANDLE_PRIMITIVE(INT32, ::int32_t, Int, Int32, );
         HANDLE_PRIMITIVE(INT64, ::int64_t, long, Int64, L);
         HANDLE_PRIMITIVE(UINT8 , ::int8_t , byte, Uint8 , );
         HANDLE_PRIMITIVE(UINT16, ::int16_t, short, Uint16, );
-        HANDLE_PRIMITIVE(UINT32, ::int32_t, int, Uint32, );
+        HANDLE_PRIMITIVE(UINT32, ::int32_t, Int, Uint32, );
         HANDLE_PRIMITIVE(UINT64, ::int64_t, long, Uint64, L);
 #undef HANDLE_PRIMITIVE
 
@@ -1053,7 +1053,7 @@ private:
             spaces(indent), "    return _initPointerField(", factoryArg, ", ", offset, ", 0);\n",
             spaces(indent), "  }\n",
 
-            spaces(indent), "  public ", builderType, " init", titleCase, "(int size) {\n",
+            spaces(indent), "  public ", builderType, " init", titleCase, "(Int size) {\n",
             unionDiscrim.set,
             spaces(indent), "    return _initPointerField(", factoryArg, ", ", offset, ", size);\n",
             spaces(indent), "  }\n",
@@ -1172,7 +1172,7 @@ private:
           readerType, "(value));\n",
           spaces(indent), "  }\n",
 
-          spaces(indent), "  public final ", builderType, " init", titleCase, "(int size) {\n",
+          spaces(indent), "  public final ", builderType, " init", titleCase, "(Int size) {\n",
           unionDiscrim.set,
           spaces(indent), "    return _initPointerField(", factory, ", ", offset, ", size);\n",
           spaces(indent), "  }\n"),
@@ -1293,14 +1293,14 @@ private:
                     }, ", "),
                   "> ")),
                builderType,
-               " init", titleCase, "( org.capnproto.ListFactory<", builderType, ", ", readerType, "> factory, int size) {\n",
+               " init", titleCase, "( org.capnproto.ListFactory<", builderType, ", ", readerType, "> factory, Int size) {\n",
                unionDiscrim.set,
                spaces(indent), "    return _initPointerField(factory, ", offset, ", size);\n",
                spaces(indent), "  }\n"
                ) :
              kj::strTree(
                spaces(indent), "  public final ", builderType,
-               " init", titleCase, "(int size) {\n",
+               " init", titleCase, "(Int size) {\n",
                unionDiscrim.set,
                spaces(indent), "    return _initPointerField(", listFactory, ", ", offset, ", size);\n",
                spaces(indent), "  }\n")
@@ -1413,16 +1413,16 @@ private:
         spaces(indent), "    }\n",
 
         spaces(indent),
-        "    public final Reader", readerTypeParams, " constructReader(org.capnproto.SegmentReader segment, int data,",
-        "int pointers, int dataSize, short pointerCount, int nestingLimit) {\n",
+        "    public final Reader", readerTypeParams, " constructReader(org.capnproto.SegmentReader segment, Int data,",
+        "Int pointers, Int dataSize, short pointerCount, Int nestingLimit) {\n",
         spaces(indent), "      return new Reader", readerTypeParams, "(",
         KJ_MAP(p, typeParamVec) {
           return kj::strTree(p, "_Factory, ");
         },
         "segment,data,pointers,dataSize,pointerCount,nestingLimit);\n",
         spaces(indent), "    }\n",
-        spaces(indent), "    public final Builder", builderTypeParams, " constructBuilder(org.capnproto.SegmentBuilder segment, int data,",
-        "int pointers, int dataSize, short pointerCount) {\n",
+        spaces(indent), "    public final Builder", builderTypeParams, " constructBuilder(org.capnproto.SegmentBuilder segment, Int data,",
+        "Int pointers, Int dataSize, short pointerCount) {\n",
         spaces(indent), "      return new Builder", builderTypeParams, "(",
         KJ_MAP(p, typeParamVec) {
           return kj::strTree(p, "_Factory, ");
@@ -1464,8 +1464,8 @@ private:
           KJ_MAP(p, typeParamVec) {
             return kj::strTree("org.capnproto.PointerFactory<", p, "_Builder, ?> ", p, "_Factory,");
           },
-          "org.capnproto.SegmentBuilder segment, int data, int pointers,",
-          "int dataSize, short pointerCount){\n",
+          "org.capnproto.SegmentBuilder segment, Int data, Int pointers,",
+          "Int dataSize, short pointerCount){\n",
           spaces(indent+1), "    super(segment, data, pointers, dataSize, pointerCount);\n",
           KJ_MAP(p, typeParamVec) {
             return kj::strTree(spaces(indent), "      this.", p, "_Factory = ", p, "_Factory;\n");
@@ -1496,8 +1496,8 @@ private:
           KJ_MAP(p, typeParamVec) {
             return kj::strTree("org.capnproto.PointerFactory<?,", p, "_Reader> ", p, "_Factory,");
           },
-          "org.capnproto.SegmentReader segment, int data, int pointers,",
-          "int dataSize, short pointerCount, int nestingLimit){\n",
+          "org.capnproto.SegmentReader segment, Int data, Int pointers,",
+          "Int dataSize, short pointerCount, Int nestingLimit){\n",
           spaces(indent+1), "    super(segment, data, pointers, dataSize, pointerCount, nestingLimit);\n",
           KJ_MAP(p, typeParamVec) {
             return kj::strTree(spaces(indent), "      this.", p, "_Factory = ", p, "_Factory;\n");
