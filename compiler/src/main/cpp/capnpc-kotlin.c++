@@ -152,7 +152,7 @@ kj::String safeIdentifier(kj::StringPtr identifier) {
   static const std::set<kj::StringPtr> keywords({
     "alignas", "alignof", "and", "and_eq", "asm", "auto", "bitand", "bitor", "bool", "break",
     "case", "catch", "char", "char16_t", "char32_t", "class", "compl", "const", "constexpr",
-    "const_cast", "continue", "decltype", "default", "delete", "do", "double", "dynamic_cast",
+    "const_cast", "continue", "decltype", "default", "delete", "do", "Double", "dynamic_cast",
     "else", "enum", "explicit", "export", "extern", "false", "Float", "for", "friend", "goto",
     "if", "inline", "Int", "Long", "mutable", "namespace", "new", "noexcept", "not", "not_eq",
     "nullptr", "operator", "or", "or_eq", "private", "protected", "public", "register",
@@ -305,7 +305,7 @@ private:
     case schema::Type::UINT32: return kj::strTree("Int");
     case schema::Type::UINT64: return kj::strTree("Long");
     case schema::Type::FLOAT32: return kj::strTree("Float");
-    case schema::Type::FLOAT64: return kj::strTree("double");
+    case schema::Type::FLOAT64: return kj::strTree("Double");
 
     case schema::Type::TEXT: return kj::strTree("org.capnproto.Text.", suffix);
     case schema::Type::DATA: return kj::strTree("org.capnproto.Data.", suffix);
