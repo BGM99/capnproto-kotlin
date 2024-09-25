@@ -1512,10 +1512,10 @@ private:
         structNode.getDiscriminantCount() == 0 ?
         kj::strTree() :
         kj::strTree(
-          spaces(indent), "  public enum Which {\n",
+          spaces(indent), "  public enum class Which {\n",
           KJ_MAP(f, structNode.getFields()) {
             if (hasDiscriminantValue(f)) {
-              return kj::strTree(spaces(indent), "    ", toUpperCase(f.getName()), ",\n");
+              return kj::strTree(spaces(indent), "    ", toUpperCase(f.getName()), ",");
             } else {
               return kj::strTree();
             }
@@ -1812,9 +1812,9 @@ private:
 
         return NodeTextNoSchema {
           kj::strTree(
-            spaces(indent), "public enum ", name, " {\n",
+            spaces(indent), "public enum class ", name, " {\n",
             KJ_MAP(e, enumerants) {
-              return kj::strTree(spaces(indent), "  ", toUpperCase(e.getProto().getName()), ",\n");
+              return kj::strTree(spaces(indent), "  ", toUpperCase(e.getProto().getName()), ",");
             },
             spaces(indent), "  _NOT_IN_SCHEMA,\n",
             spaces(indent), "}\n"
