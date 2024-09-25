@@ -158,7 +158,7 @@ kj::String safeIdentifier(kj::StringPtr identifier) {
     "nullptr", "operator", "or", "or_eq", "private", "protected", "public", "register",
     "reinterpret_cast", "return", "Short", "signed", "sizeof", "static", "static_assert",
     "static_cast", "struct", "switch", "template", "this", "thread_local", "throw", "true",
-    "try", "typedef", "typeid", "typename", "union", "unsigned", "using", "virtual", "void",
+    "try", "typedef", "typeid", "typename", "union", "unsigned", "using", "virtual", "Unit",
     "volatile", "wchar_t", "while", "xor", "xor_eq"
   });
 
@@ -1005,7 +1005,7 @@ private:
               kj::strTree(spaces(indent), "    return _get",toTitleCase(builderType),"Field(", offset, defaultMaskParam, ");\n"))),
             spaces(indent), "  }\n",
 
-            spaces(indent), "  public final void set", titleCase, "(", readerType, " value) {\n",
+            spaces(indent), "  public final Unit set", titleCase, "(", readerType, " value) {\n",
             unionDiscrim.set,
             (typeBody.which() == schema::Type::ENUM ?
              kj::strTree(spaces(indent), "    _setShortField(", offset, ", (Short)value.ordinal()", defaultMaskParam, ");\n") :
@@ -1059,7 +1059,7 @@ private:
             spaces(indent), "  }\n",
 
             (field.getType().getBrandParameter() == nullptr ? kj::strTree() :
-             kj::strTree(spaces(indent), "  public <", readerType, "> void set", titleCase,
+             kj::strTree(spaces(indent), "  public <", readerType, "> Unit set", titleCase,
                          "(org.capnproto.SetPointerBuilder<", builderType, ",", readerType, "> factory,",
                          readerType, " value) {\n",
                          unionDiscrim.set,
@@ -1109,14 +1109,14 @@ private:
                     return kj::strTree(p, "_Reader");
                   }, ", "),
                 "> ")),
-             "void set", titleCase,
+             "Unit set", titleCase,
              "(org.capnproto.SetPointerBuilder<", builderType, ", ", readerType, "> factory, ", readerType, " value) {\n",
              unionDiscrim.set,
              spaces(indent), "    _setPointerField(factory, ", offset, ", value);\n",
              spaces(indent), "  }\n"
              ) :
            kj::strTree(
-             spaces(indent), "  public final void set", titleCase, "(", readerType, " value) {\n",
+             spaces(indent), "  public final Unit set", titleCase, "(", readerType, " value) {\n",
              unionDiscrim.set,
              spaces(indent), "    _setPointerField(", factoryArg, ",", offset, ", value);\n",
              spaces(indent), "  }\n")),
@@ -1162,11 +1162,11 @@ private:
           spaces(indent), "    return _getPointerField(", factory, ", ",
           offset, ", ", defaultParams, ");\n",
           spaces(indent), "  }\n",
-          spaces(indent), "  public final void set", titleCase, "(", readerType, " value) {\n",
+          spaces(indent), "  public final Unit set", titleCase, "(", readerType, " value) {\n",
           unionDiscrim.set,
           spaces(indent), "    _setPointerField(", factory, ", ", offset, ", value);\n",
           spaces(indent), "  }\n",
-          spaces(indent), "  public final void set", titleCase, "(", setterInputType, " value) {\n",
+          spaces(indent), "  public final Unit set", titleCase, "(", setterInputType, " value) {\n",
           unionDiscrim.set,
           spaces(indent), "    _setPointerField(", factory, ", ", offset, ", new ",
           readerType, "(value));\n",
@@ -1268,14 +1268,14 @@ private:
                       return kj::strTree(p, "_Reader");
                     }, ", "),
                   "> ")),
-               "void set", titleCase,
+               "Unit set", titleCase,
                "(org.capnproto.SetPointerBuilder<", builderType, ", ", readerType, "> factory, ", readerType, " value) {\n",
                unionDiscrim.set,
                spaces(indent), "    _setPointerField(factory, ", offset, ", value);\n",
                spaces(indent), "  }\n"
                ) :
              kj::strTree(
-               spaces(indent), "  public final void set", titleCase, "(", readerType, " value) {\n",
+               spaces(indent), "  public final Unit set", titleCase, "(", readerType, " value) {\n",
                unionDiscrim.set,
                spaces(indent), "    _setPointerField(", listFactory, ", ", offset, ", value);\n",
                spaces(indent), "  }\n"
