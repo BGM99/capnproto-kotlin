@@ -1432,7 +1432,7 @@ private:
         spaces(indent), "    public final org.capnproto.StructSize structSize() {\n",
         spaces(indent), "      return ", fullName, ".STRUCT_SIZE\n",
         spaces(indent), "    }\n",
-        spaces(indent), "    public final Reader", readerTypeParams, " asReader(Builder", builderTypeParams, " builder) {\n",
+        spaces(indent), "    fun", " asReader(builder:  Builder", builderTypeParams, "): Reader", readerTypeParams, " {\n",
         spaces(indent), "      return builder.asReader(",
         (hasTypeParams ? kj::strTree("this") : kj::strTree()),
         ")\n",
@@ -1472,11 +1472,11 @@ private:
           },
           spaces(indent+1), "  }\n",
           makeWhich(schema, indent+2),
-          spaces(indent+1), "  public final ", readerTypeParams, "Reader", readerTypeParams, " asReader(",
+          spaces(indent+1), "  fun asReader(",
           (!hasTypeParams ? kj::strTree() :
-           kj::strTree(name, ".Factory", factoryTypeParams, " factory")
+           kj::strTree("factory: ", name, ".Factory", factoryTypeParams)
             ),
-          ") {\n",
+          "): Reader", readerTypeParams, " {\n",
           spaces(indent+1), "    return Reader", readerTypeParams, "(",
           KJ_MAP(p, typeParamVec) {
             return kj::strTree("factory.", p, "_Factory, ");
