@@ -296,11 +296,11 @@ private:
     case schema::Type::VOID: return kj::strTree("org.capnproto.Void");
 
     case schema::Type::BOOL: return kj::strTree("boolean");
-    case schema::Type::INT8: return kj::strTree("byte");
+    case schema::Type::INT8: return kj::strTree("Byte");
     case schema::Type::INT16: return kj::strTree("Short");
     case schema::Type::INT32: return kj::strTree("Int");
     case schema::Type::INT64: return kj::strTree("Long");
-    case schema::Type::UINT8: return kj::strTree("byte");
+    case schema::Type::UINT8: return kj::strTree("Byte");
     case schema::Type::UINT16: return kj::strTree("Short");
     case schema::Type::UINT32: return kj::strTree("Int");
     case schema::Type::UINT64: return kj::strTree("Long");
@@ -495,11 +495,11 @@ private:
   static kj::StringPtr maskType(schema::Type::Which whichType) {
     switch (whichType) {
       case schema::Type::BOOL: return "Boolean";
-      case schema::Type::INT8: return "byte";
+      case schema::Type::INT8: return "Byte";
       case schema::Type::INT16: return "Short";
       case schema::Type::INT32: return "Int";
       case schema::Type::INT64: return "Long";
-      case schema::Type::UINT8: return "byte";
+      case schema::Type::UINT8: return "Byte";
       case schema::Type::UINT16: return "Short";
       case schema::Type::UINT32: return "Int";
       case schema::Type::UINT64: return "Long";
@@ -522,11 +522,11 @@ private:
   static kj::StringPtr maskZeroLiteral(schema::Type::Which whichType) {
     switch (whichType) {
       case schema::Type::BOOL: return "false";
-      case schema::Type::INT8: return "(byte)0";
+      case schema::Type::INT8: return "(Byte)0";
       case schema::Type::INT16: return "(Short)0";
       case schema::Type::INT32: return "0";
       case schema::Type::INT64: return "0L";
-      case schema::Type::UINT8: return "(byte)0";
+      case schema::Type::UINT8: return "(Byte)0";
       case schema::Type::UINT16: return "(Short)0";
       case schema::Type::UINT32: return "0";
       case schema::Type::UINT64: return "0L";
@@ -892,11 +892,11 @@ private:
         break;
 
         HANDLE_PRIMITIVE(BOOL, bool, Boolean, Bool, );
-        HANDLE_PRIMITIVE(INT8 , ::int8_t , byte, Int8 , );
+        HANDLE_PRIMITIVE(INT8 , ::int8_t , Byte, Int8 , );
         HANDLE_PRIMITIVE(INT16, ::int16_t, Short, Int16, );
         HANDLE_PRIMITIVE(INT32, ::int32_t, Int, Int32, );
         HANDLE_PRIMITIVE(INT64, ::int64_t, Long, Int64, L);
-        HANDLE_PRIMITIVE(UINT8 , ::int8_t , byte, Uint8 , );
+        HANDLE_PRIMITIVE(UINT8 , ::int8_t , Byte, Uint8 , );
         HANDLE_PRIMITIVE(UINT16, ::int16_t, Short, Uint16, );
         HANDLE_PRIMITIVE(UINT32, ::int32_t, Int, Uint32, );
         HANDLE_PRIMITIVE(UINT64, ::int64_t, Long, Uint64, L);
@@ -1135,7 +1135,7 @@ private:
         "Schemas.b_", kj::hex(typeId), ".buffer, ", defaultOffset, ", ", defaultSize);
 
       kj::String blobKind =  typeBody.which() == schema::Type::TEXT ? kj::str("Text") : kj::str("Data");
-      kj::String setterInputType = typeBody.which() == schema::Type::TEXT ? kj::str("String") : kj::str("byte []");
+      kj::String setterInputType = typeBody.which() == schema::Type::TEXT ? kj::str("String") : kj::str("Byte []");
       kj::String factory = kj::str("org.capnproto.", kj::str(blobKind), ".factory");
 
       return FieldText {
