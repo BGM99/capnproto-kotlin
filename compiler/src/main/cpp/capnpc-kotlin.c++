@@ -1402,7 +1402,7 @@ private:
           ",(Short)", structNode.getPointerCount(), ");\n"),
 
         spaces(indent), "  public static final class Factory", factoryTypeParams,
-        " extends org.capnproto.StructFactory<Builder", builderTypeParams, ", Reader", readerTypeParams, "> {\n",
+        " : org.capnproto.StructFactory<Builder", builderTypeParams, ", Reader", readerTypeParams, "> {\n",
         factoryMembers.flatten(),
         spaces(indent), "    public Factory(",
         factoryArgs.flatten(),
@@ -1456,7 +1456,7 @@ private:
            spaces(indent), "    new org.capnproto.StructList.Factory<Builder, Reader>(factory);\n")),
 
         kj::strTree(
-          spaces(indent+1), "public static final class Builder", builderTypeParams, " extends org.capnproto.StructBuilder {\n",
+          spaces(indent+1), "public static final class Builder", builderTypeParams, " : org.capnproto.StructBuilder {\n",
           kj::strTree(KJ_MAP(p, typeParamVec) {
               return kj::strTree(spaces(indent), "    final org.capnproto.PointerFactory<", p, "_Builder, ?> ", p, "_Factory;\n");
             }),
@@ -1488,7 +1488,7 @@ private:
           "\n"),
 
         kj::strTree(
-          spaces(indent+1), "public static final class Reader", readerTypeParams, " extends org.capnproto.StructReader {\n",
+          spaces(indent+1), "public static final class Reader", readerTypeParams, " : org.capnproto.StructReader {\n",
           KJ_MAP(p, typeParamVec) {
               return kj::strTree(spaces(indent), "    final org.capnproto.PointerFactory<?,", p, "_Reader> ", p, "_Factory;\n");
             },
