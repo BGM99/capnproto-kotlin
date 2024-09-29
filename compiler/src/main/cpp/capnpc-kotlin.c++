@@ -689,10 +689,10 @@ private:
         kj::str(
           spaces(indent), "  _setShortField(", discrimOffset, ", (Short)",
           scope, "Which.", upperCase, ".ordinal())\n"),
-          kj::strTree(spaces(indent), "public final Boolean is", titleCase, "() {\n",
+          kj::strTree(spaces(indent), "fun is", titleCase, "(): Boolean {\n",
                       spaces(indent), "  return which() == ", scope, "Which.", upperCase,"\n",
                       spaces(indent), "}\n"),
-          kj::strTree(spaces(indent), "public final Boolean is", titleCase, "() {\n",
+          kj::strTree(spaces(indent), "fun is", titleCase, "(): Boolean {\n",
                       spaces(indent), "  return which() == ", scope, "Which.", upperCase, "\n",
                       spaces(indent), "}\n")
     };
@@ -1330,7 +1330,7 @@ private:
     } else {
       auto fields = schema.getUnionFields();
       return kj::strTree(
-        spaces(indent), "public Which which() {\n",
+        spaces(indent), "fun which(): Which {\n",
         spaces(indent+1), "when (_getShortField(",
         schema.getProto().getStruct().getDiscriminantOffset(), ")) {\n",
         KJ_MAP(f, fields) {
