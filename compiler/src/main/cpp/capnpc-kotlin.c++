@@ -1397,16 +1397,16 @@ private:
 
     return StructText {
       kj::strTree(
-        spaces(indent), "public static class ", name, " {\n",
+        spaces(indent), "class ", name, " {\n",
         kj::strTree(
-          spaces(indent), "  public static final org.capnproto.StructSize STRUCT_SIZE =",
+          spaces(indent), "  val STRUCT_SIZE: org.capnproto.StructSize =",
           " org.capnproto.StructSize((Short)", structNode.getDataWordCount(),
           ",(Short)", structNode.getPointerCount(), ")\n"),
 
-        spaces(indent), "  public static final class Factory", factoryTypeParams,
+        spaces(indent), "  class Factory", factoryTypeParams,
         " : org.capnproto.StructFactory<Builder", builderTypeParams, ", Reader", readerTypeParams, "> {\n",
         factoryMembers.flatten(),
-        spaces(indent), "    public Factory(",
+        spaces(indent), "    fun Factory(",
         factoryArgs.flatten(),
         ") {\n",
         KJ_MAP(p, typeParamVec) {
@@ -1415,26 +1415,26 @@ private:
         spaces(indent), "    }\n",
 
         spaces(indent),
-        "    public final Reader", readerTypeParams, " constructReader(org.capnproto.SegmentReader segment, Int data,",
-        "Int pointers, Int dataSize, Short pointerCount, Int nestingLimit) {\n",
+        "    fun constructReader(segment: org.capnproto.SegmentReader, data: Int,",
+        "pointers: Int, dataSize: Int, pointerCount: Short, nestingLimit: Int): Reader", readerTypeParams, " {\n",
         spaces(indent), "      return Reader", readerTypeParams, "(",
         KJ_MAP(p, typeParamVec) {
           return kj::strTree(p, "_Factory, ");
         },
         "segment,data,pointers,dataSize,pointerCount,nestingLimit)\n",
         spaces(indent), "    }\n",
-        spaces(indent), "    public final Builder", builderTypeParams, " constructBuilder(org.capnproto.SegmentBuilder segment, Int data,",
-        "Int pointers, Int dataSize, Short pointerCount) {\n",
+        spaces(indent), "    fun constructBuilder(segment: org.capnproto.SegmentBuilder, data: Int,",
+        "pointers: Int, dataSize: Int, pointerCount: Short): Builder", builderTypeParams, " {\n",
         spaces(indent), "      return Builder", builderTypeParams, "(",
         KJ_MAP(p, typeParamVec) {
           return kj::strTree(p, "_Factory, ");
         },
         "segment, data, pointers, dataSize, pointerCount)\n",
         spaces(indent), "    }\n",
-        spaces(indent), "    public final org.capnproto.StructSize structSize() {\n",
+        spaces(indent), "    fun structSize(): org.capnproto.StructSize {\n",
         spaces(indent), "      return ", fullName, ".STRUCT_SIZE\n",
         spaces(indent), "    }\n",
-        spaces(indent), "    fun", " asReader(builder:  Builder", builderTypeParams, "): Reader", readerTypeParams, " {\n",
+        spaces(indent), "    fun asReader(builder:  Builder", builderTypeParams, "): Reader", readerTypeParams, " {\n",
         spaces(indent), "      return builder.asReader(",
         (hasTypeParams ? kj::strTree("this") : kj::strTree()),
         ")\n",
@@ -1453,21 +1453,21 @@ private:
            spaces(indent), "  }\n"
            ) :
          kj::strTree(
-           spaces(indent), "  public static final Factory factory = Factory()\n",
-           spaces(indent), "  public static final org.capnproto.StructList.Factory<Builder,Reader> listFactory =\n",
+           spaces(indent), "  val factory: Factory = Factory()\n",
+           spaces(indent), "  val listFactory: org.capnproto.StructList.Factory<Builder,Reader> =\n",
            spaces(indent), "    org.capnproto.StructList.Factory<Builder, Reader>(factory)\n")),
 
         kj::strTree(
-          spaces(indent+1), "public static final class Builder", builderTypeParams, " : org.capnproto.StructBuilder {\n",
+          spaces(indent+1), "class Builder", builderTypeParams, " : org.capnproto.StructBuilder {\n",
           kj::strTree(KJ_MAP(p, typeParamVec) {
-              return kj::strTree(spaces(indent), "    final org.capnproto.PointerFactory<", p, "_Builder, ?> ", p, "_Factory\n");
+              return kj::strTree(spaces(indent), "    val ", p, "_Factory: org.capnproto.PointerFactory<", p, "_Builder, ?>\n");
             }),
           spaces(indent+1), "  Builder(",
           KJ_MAP(p, typeParamVec) {
-            return kj::strTree("org.capnproto.PointerFactory<", p, "_Builder, ?> ", p, "_Factory,");
+            return kj::strTree(p, "_Factory: " "org.capnproto.PointerFactory<", p, "_Builder, ?>, ");
           },
-          "org.capnproto.SegmentBuilder segment, Int data, Int pointers,",
-          "Int dataSize, Short pointerCount){\n",
+          "segment: org.capnproto.SegmentBuilder, data: Int, pointers: Int,",
+          "dataSize: Int, pointerCount: Short){\n",
           spaces(indent+1), "    super(segment, data, pointers, dataSize, pointerCount)\n",
           KJ_MAP(p, typeParamVec) {
             return kj::strTree(spaces(indent), "      this.", p, "_Factory = ", p, "_Factory\n");
@@ -1490,16 +1490,16 @@ private:
           "\n"),
 
         kj::strTree(
-          spaces(indent+1), "public static final class Reader", readerTypeParams, " : org.capnproto.StructReader {\n",
+          spaces(indent+1), "class Reader", readerTypeParams, " : org.capnproto.StructReader {\n",
           KJ_MAP(p, typeParamVec) {
-              return kj::strTree(spaces(indent), "    final org.capnproto.PointerFactory<?,", p, "_Reader> ", p, "_Factory\n");
+              return kj::strTree(spaces(indent), "    val ", p, "_Factory: org.capnproto.PointerFactory<?,", p, "_Reader>\n");
             },
           spaces(indent+1), "  Reader(",
           KJ_MAP(p, typeParamVec) {
-            return kj::strTree("org.capnproto.PointerFactory<?,", p, "_Reader> ", p, "_Factory,");
+            return kj::strTree(p, "_Factory: org.capnproto.PointerFactory<?,", p, "_Reader>, ");
           },
-          "org.capnproto.SegmentReader segment, Int data, Int pointers,",
-          "Int dataSize, Short pointerCount, Int nestingLimit){\n",
+          "segment: org.capnproto.SegmentReader, data: Int, pointers: Int,",
+          "dataSize: Int, pointerCount: Short, nestingLimit: Int){\n",
           spaces(indent+1), "    super(segment, data, pointers, dataSize, pointerCount, nestingLimit)\n",
           KJ_MAP(p, typeParamVec) {
             return kj::strTree(spaces(indent), "      this.", p, "_Factory = ", p, "_Factory\n");
@@ -1514,7 +1514,7 @@ private:
         structNode.getDiscriminantCount() == 0 ?
         kj::strTree() :
         kj::strTree(
-          spaces(indent), "  public enum class Which {\n",
+          spaces(indent), "  enum class Which {\n",
           KJ_MAP(f, structNode.getFields()) {
             if (hasDiscriminantValue(f)) {
               return kj::strTree(spaces(indent), "    ", toUpperCase(f.getName()), ",");
@@ -1565,7 +1565,7 @@ private:
       case schema::Type::ENUM:
         return ConstText {
           false,
-            kj::strTree(spaces(indent), "public static final ", typeName_, ' ', upperCase, " = ",
+            kj::strTree(spaces(indent), "val ", upperCase, ": ", typeName_, " = ",
                         literalValue(constProto.getType(), constProto.getValue()), "\n")
         };
 
@@ -1573,7 +1573,7 @@ private:
         return ConstText {
           true,
           kj::strTree(spaces(indent),
-                      "public static final org.capnproto.Text.Reader ", upperCase,
+                      "val ", upperCase, ":  org.capnproto.Text.Reader",
                       " = org.capnproto.Text.Reader(Schemas.b_",
                       kj::hex(proto.getId()), ".buffer, ", schema.getValueSchemaOffset(),
                       ", ", constProto.getValue().getText().size(), ")\n")
@@ -1584,7 +1584,7 @@ private:
         return ConstText {
           true,
           kj::strTree(spaces(indent),
-                      "public static final org.capnproto.Data.Reader ", upperCase,
+                      "val ", upperCase, ": org.capnproto.Data.Reader",
                       " = org.capnproto.Data.Reader(Schemas.b_",
                       kj::hex(proto.getId()), ".buffer, ", schema.getValueSchemaOffset(),
                       ", ", constProto.getValue().getData().size(), ")\n")
@@ -1595,7 +1595,7 @@ private:
         return ConstText {
           true,
             kj::strTree(spaces(indent),
-                        "public static final ", typeName_, " ", upperCase, " =\n",
+                        "val ", upperCase, ": ", typeName_, " =\n",
                         spaces(indent), "  ",
                         " org.capnproto.AnyPointer.Reader(Schemas.b_",
                         kj::hex(proto.getId()), ",", schema.getValueSchemaOffset(), ",0x7fffffff).getAs(",
@@ -1608,7 +1608,7 @@ private:
           true,
           kj::strTree(
             spaces(indent),
-            "public static final ", typeName_, ' ', upperCase, " =\n",
+            "val ", upperCase, ": ", typeName_, " =\n",
             spaces(indent), " (",
             "org.capnproto.AnyPointer.Reader(Schemas.b_",
             kj::hex(proto.getId()), ",", schema.getValueSchemaOffset(), ",0x7fffffff).getAs(",
@@ -1723,9 +1723,8 @@ private:
         break;
     }
 
-    // Java limits method code size to 64KB. Maybe we should use class.getResource()?
     auto schemaDef = kj::strTree(
-      "public static final org.capnproto.SegmentReader b_", hexId, " =\n",
+      "val b_", hexId, ": org.capnproto.SegmentReader =\n",
       "   org.capnproto.GeneratedClassSupport.decodeRawBytes(\n",
       "   ", kj::mv(schemaLiteral), " \"\"",
       ")\n");
@@ -1791,7 +1790,7 @@ private:
 
         return NodeTextNoSchema {
           kj::strTree(
-            spaces(indent), "public enum class ", name, " {\n",
+            spaces(indent), "enum class ", name, " {\n",
             KJ_MAP(e, enumerants) {
               return kj::strTree(spaces(indent), "  ", toUpperCase(e.getProto().getName()), ",");
             },
@@ -1890,10 +1889,10 @@ private:
           "// Generated by Cap'n Proto compiler, DO NOT EDIT\n"
           "// source: ", baseName(displayName), "\n\n",
           "package ", packageName, "\n\n",
-          "public final class ", outerClassname, " {\n",
+          "class ", outerClassname, " {\n",
           KJ_MAP(n, nodeTexts) { return kj::mv(n.outerTypeDef); },
           "\n",
-          "public static final class Schemas {\n",
+          "class Schemas {\n",
           KJ_MAP(n, nodeTexts) { return kj::mv(n.capnpSchemaDefs); },
           "}\n",
           "}\n",
@@ -1937,7 +1936,7 @@ private:
 
       auto fileText = makeFileText(schema, requestedFile);
 
-      writeFile(kj::str(filename.slice(0, stemstart), fileText.outerClassname, ".java"), fileText.source);
+      writeFile(kj::str(filename.slice(0, stemstart), fileText.outerClassname, ".kt"), fileText.source);
     }
 
     return true;
