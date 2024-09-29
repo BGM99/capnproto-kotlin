@@ -828,7 +828,7 @@ private:
         return FieldText {
           kj::strTree(
             kj::mv(unionDiscrim.readerIsDef),
-            spaces(indent), "  public ", titleCase, ".Reader get", titleCase, "() {\n",
+            spaces(indent), "  fun get", titleCase, "(): ", titleCase, ".Reader {\n",
             spaces(indent), "    return ", scope, titleCase,
             ".Reader(segment, data, pointers, dataSize, pointerCount, nestingLimit)\n",
             spaces(indent), "  }\n",
@@ -836,7 +836,7 @@ private:
 
             kj::strTree(
               kj::mv(unionDiscrim.builderIsDef),
-              spaces(indent), "  public final ", titleCase, ".Builder get", titleCase, "() {\n",
+              spaces(indent), "  fun get", titleCase, "(): ", titleCase, ".Builder {\n",
               spaces(indent), "    return ", scope, titleCase,
               ".Builder(segment, data, pointers, dataSize, pointerCount)\n",
               spaces(indent), "  }\n",
@@ -982,7 +982,7 @@ private:
       return FieldText {
         kj::strTree(
             kj::mv(unionDiscrim.readerIsDef),
-            spaces(indent), "  public final ", readerType, " get", titleCase, "() {\n",
+            spaces(indent), "  fun get", titleCase, "(): ", readerType, " {\n",
             unionDiscrim.check,
             (typeBody.which() == schema::Type::ENUM ?
              makeEnumGetter(field.getType().asEnum(),
@@ -995,7 +995,7 @@ private:
 
           kj::strTree(
             kj::mv(unionDiscrim.builderIsDef),
-            spaces(indent), "  public final ", builderType, " get", titleCase, "() {\n",
+            spaces(indent), "  fun get", titleCase, "(): ", builderType, " {\n",
             unionDiscrim.check,
             (typeBody.which() == schema::Type::ENUM ?
              makeEnumGetter(field.getType().asEnum(),
@@ -1005,7 +1005,7 @@ private:
               kj::strTree(spaces(indent), "    return _get",toTitleCase(builderType),"Field(", offset, defaultMaskParam, ")\n"))),
             spaces(indent), "  }\n",
 
-            spaces(indent), "  public final Unit set", titleCase, "(", readerType, " value) {\n",
+            spaces(indent), "  fun set", titleCase, "(value: ", readerType,") {\n",
             unionDiscrim.set,
             (typeBody.which() == schema::Type::ENUM ?
              kj::strTree(spaces(indent), "    _setShortField(", offset, ", (Short)value.ordinal()", defaultMaskParam, ")\n") :
@@ -1032,7 +1032,7 @@ private:
             spaces(indent), "    return !_pointerFieldIsNull(", offset, ")\n",
             spaces(indent), "  }\n",
 
-            spaces(indent), "  public ", readerType, " get", titleCase, "() {\n",
+            spaces(indent), "  fun get", titleCase, "(): ", readerType, " {\n",
             unionDiscrim.check,
             spaces(indent), "    return _getPointerField(", factoryArg, ", ", offset, ")\n",
             spaces(indent), "  }\n"),
@@ -1043,7 +1043,7 @@ private:
             spaces(indent), "    return !_pointerFieldIsNull(", offset, ")\n",
             spaces(indent), "  }\n",
 
-            spaces(indent), "  public ", builderType, " get", titleCase, "() {\n",
+            spaces(indent), "  fun get", titleCase, "(): ", builderType, " {\n",
             unionDiscrim.check,
             spaces(indent), "    return _getPointerField(", factoryArg, ", ", offset, ")\n",
             spaces(indent), "  }\n",
@@ -1059,7 +1059,7 @@ private:
             spaces(indent), "  }\n",
 
             (field.getType().getBrandParameter() == nullptr ? kj::strTree() :
-             kj::strTree(spaces(indent), "  public <", readerType, "> Unit set", titleCase,
+             kj::strTree(spaces(indent), "  fun <", readerType, "> Unit set", titleCase,
                          "(org.capnproto.SetPointerBuilder<", builderType, ",", readerType, "> factory,",
                          readerType, " value) {\n",
                          unionDiscrim.set,
@@ -1085,7 +1085,7 @@ private:
           spaces(indent), "    return !_pointerFieldIsNull(", offset, ")\n",
           spaces(indent), "  }\n",
 
-          spaces(indent), "  public ", readerType, " get", titleCase, "() {\n",
+          spaces(indent), "  fun get", titleCase, "(): ", readerType, "{\n",
           unionDiscrim.check,
           spaces(indent), "    return ",
           "_getPointerField(", factoryArg, ",", offset,",", defaultParams, ")\n",
@@ -1093,7 +1093,7 @@ private:
 
         kj::strTree(
           kj::mv(unionDiscrim.builderIsDef),
-          spaces(indent), "  public final ", builderType, " get", titleCase, "() {\n",
+          spaces(indent), "  fun get", titleCase, "(): ", builderType, " {\n",
           unionDiscrim.check,
           spaces(indent), "    return ",
           "_getPointerField(", factoryArg, ", ", offset, ", ", defaultParams, ")\n",
@@ -1101,7 +1101,7 @@ private:
 
           (field.getType().asStruct().getProto().getIsGeneric() ?
            kj::strTree(
-             spaces(indent), "  public final ",
+             spaces(indent), "  fun ",
              (typeParamVec.size() == 0 ? kj::strTree() :
               kj::strTree(
                 "<",
@@ -1116,7 +1116,7 @@ private:
              spaces(indent), "  }\n"
              ) :
            kj::strTree(
-             spaces(indent), "  public final Unit set", titleCase, "(", readerType, " value) {\n",
+             spaces(indent), "  fun set", titleCase, "(value: ", readerType, ") {\n",
              unionDiscrim.set,
              spaces(indent), "    _setPointerField(", factoryArg, ",", offset, ", value)\n",
              spaces(indent), "  }\n")),
@@ -1146,8 +1146,8 @@ private:
           spaces(indent), "    return !_pointerFieldIsNull(", offset, ")\n",
           spaces(indent), "  }\n",
 
-          spaces(indent), "  public ", readerType,
-          " get", titleCase, "() {\n",
+          spaces(indent), "  fun get",
+          titleCase, "(): ", readerType, " {\n",
           spaces(indent), "    return _getPointerField(", factory, ", ",
           offset, ", ", defaultParams, ")\n",
           spaces(indent), "  }\n", "\n"),
@@ -1158,15 +1158,15 @@ private:
           unionDiscrim.has,
           spaces(indent), "    return !_pointerFieldIsNull(", offset, ")\n",
           spaces(indent), "  }\n",
-          spaces(indent), "  public final ", builderType, " get", titleCase, "() {\n",
+          spaces(indent), "  fun get", titleCase, "(): ", builderType, " {\n",
           spaces(indent), "    return _getPointerField(", factory, ", ",
           offset, ", ", defaultParams, ")\n",
           spaces(indent), "  }\n",
-          spaces(indent), "  public final Unit set", titleCase, "(", readerType, " value) {\n",
+          spaces(indent), "  fun set", titleCase, "(value: ", readerType, ") {\n",
           unionDiscrim.set,
           spaces(indent), "    _setPointerField(", factory, ", ", offset, ", value)\n",
           spaces(indent), "  }\n",
-          spaces(indent), "  public final Unit set", titleCase, "(", setterInputType, " value) {\n",
+          spaces(indent), "  fun set", titleCase, "(value: ", setterInputType, ") {\n",
           unionDiscrim.set,
           spaces(indent), "    _setPointerField(", factory, ", ", offset, ", ",
           readerType, "(value))\n",
@@ -1207,22 +1207,23 @@ private:
 
             (isGeneric ?
              kj::strTree(
-               spaces(indent), "  public final ",
+               spaces(indent), "  fun get",
+               titleCase, "(factory: org.capnproto.ListFactory<", builderType, ", ", readerType, "> ): ",
                (typeParamVec.size() == 0 ? kj::strTree() :
                 kj::strTree(
-                  "<",
-                  kj::StringTree(KJ_MAP(p, typeParamVec) {
-                      return kj::strTree(p, "_Builder");
-                    }, ", "),
-                  "> ")),
+                        "<",
+                        kj::StringTree(KJ_MAP(p, typeParamVec) {
+                            return kj::strTree(p, "_Builder");
+                        }, ", "),
+                        "> ")),
                readerType,
-               " get", titleCase, "( org.capnproto.ListFactory<", builderType, ", ", readerType, "> factory) {\n",
+               " {\n",
                spaces(indent), "    return _getPointerField(factory,", offset, ")\n",
                spaces(indent), "  }\n"
                ) :
              kj::strTree(
-               spaces(indent), "  public final ", readerType,
-               " get", titleCase, "() {\n",
+               spaces(indent), "  fun get",
+               titleCase, "(): ", readerType, " {\n",
                spaces(indent), "    return _getPointerField(", listFactory, ", ", offset, ", ", defaultParams, ")\n",
                spaces(indent), "  }\n"
                )
@@ -1237,22 +1238,23 @@ private:
 
             (isGeneric ?
              kj::strTree(
-               spaces(indent), "  public final ",
+               spaces(indent), "  fun get",
+               titleCase, "(factory:  org.capnproto.ListFactory<", builderType, ", ", readerType, ">): ",
                (typeParamVec.size() == 0 ? kj::strTree() :
                 kj::strTree(
-                  "<",
-                  kj::StringTree(KJ_MAP(p, typeParamVec) {
-                      return kj::strTree(p, "_Reader");
-                    }, ", "),
-                  "> ")),
+                        "<",
+                        kj::StringTree(KJ_MAP(p, typeParamVec) {
+                            return kj::strTree(p, "_Reader");
+                        }, ", "),
+                        "> ")),
                builderType,
-               " get", titleCase, "( org.capnproto.ListFactory<", builderType, ", ", readerType, "> factory) {\n",
+               " {\n",
                spaces(indent), "    return _getPointerField(factory,", offset, ")\n",
                spaces(indent), "  }\n"
                ) :
              kj::strTree(
-               spaces(indent), "  public final ", builderType,
-               " get", titleCase, "() {\n",
+               spaces(indent), "  fun get",
+               titleCase, "(): ", builderType, " {\n",
                spaces(indent), "    return _getPointerField(", listFactory, ", ", offset, ", ", defaultParams, ")\n",
                spaces(indent), "  }\n"
                )
@@ -1260,7 +1262,7 @@ private:
 
             (isGeneric ?
              kj::strTree(
-               spaces(indent), "  public final ",
+               spaces(indent), "  fun ",
                (typeParamVec.size() == 0 ? kj::strTree() :
                 kj::strTree(
                   "<",
@@ -1275,7 +1277,7 @@ private:
                spaces(indent), "  }\n"
                ) :
              kj::strTree(
-               spaces(indent), "  public final Unit set", titleCase, "(", readerType, " value) {\n",
+               spaces(indent), "  fun set", titleCase, "(value: ", readerType, ") {\n",
                unionDiscrim.set,
                spaces(indent), "    _setPointerField(", listFactory, ", ", offset, ", value)\n",
                spaces(indent), "  }\n"
