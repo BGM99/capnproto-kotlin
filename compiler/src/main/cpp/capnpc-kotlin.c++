@@ -1397,13 +1397,13 @@ private:
 
     return StructText {
       kj::strTree(
-        spaces(indent), "class ", name, " {\n",
+        spaces(indent), "object ", name, " {\n",
         kj::strTree(
           spaces(indent), "  val STRUCT_SIZE: org.capnproto.StructSize =",
           " org.capnproto.StructSize((Short)", structNode.getDataWordCount(),
           ",(Short)", structNode.getPointerCount(), ")\n"),
 
-        spaces(indent), "  inner class Factory", factoryTypeParams,
+        spaces(indent), "  class Factory", factoryTypeParams,
         " : org.capnproto.StructFactory<Builder", builderTypeParams, ", Reader", readerTypeParams, ">() {\n",
         factoryMembers.flatten(),
         spaces(indent), "    fun Factory(",
@@ -1432,7 +1432,7 @@ private:
         "segment, data, pointers, dataSize, pointerCount)\n",
         spaces(indent), "    }\n",
         spaces(indent), "    override fun structSize(): org.capnproto.StructSize {\n",
-        spaces(indent), "      return this@", fullName, ".STRUCT_SIZE\n",
+        spaces(indent), "      return ", fullName, ".STRUCT_SIZE\n",
         spaces(indent), "    }\n",
         spaces(indent), "    override fun asReader(builder:  Builder", builderTypeParams, "): Reader", readerTypeParams, " {\n",
         spaces(indent), "      return builder.asReader(",
