@@ -523,16 +523,16 @@ private:
     switch (whichType) {
       case schema::Type::BOOL: return "false";
       case schema::Type::INT8: return "(Byte)0";
-      case schema::Type::INT16: return "(Short)0";
+      case schema::Type::INT16: return "0.toShort()";
       case schema::Type::INT32: return "0";
       case schema::Type::INT64: return "0L";
       case schema::Type::UINT8: return "(Byte)0";
-      case schema::Type::UINT16: return "(Short)0";
+      case schema::Type::UINT16: return "0.toShort()";
       case schema::Type::UINT32: return "0";
       case schema::Type::UINT64: return "0L";
       case schema::Type::FLOAT32: return "0";
       case schema::Type::FLOAT64: return "0L";
-      case schema::Type::ENUM: return "(Short)0";
+      case schema::Type::ENUM: return "0.toShort()";
 
       case schema::Type::VOID:
       case schema::Type::TEXT:
@@ -684,11 +684,12 @@ private:
               "  if (which() != ", scope, "Which.", upperCase, ") return false\n"),
         kj::str(
           spaces(indent),
-          "  assert which() == ", scope, "Which.", upperCase, ":\n",
-          spaces(indent), "              \"Must check which() before get()ing a union member.\"\n"),
+          "  require(which() == ", scope, "Which.", upperCase, ") {\n",
+          spaces(indent), "      \"Must check which() before get()ing a union member.\"\n",
+          spaces(indent), "  }\n"),
         kj::str(
-          spaces(indent), "  _setShortField(", discrimOffset, ", (Short)",
-          scope, "Which.", upperCase, ".ordinal())\n"),
+          spaces(indent), "  _setShortField(", discrimOffset, ", ",
+          scope, "Which.", upperCase, ".ordinal.toShort())\n"),
           kj::strTree(spaces(indent), "fun is", titleCase, "(): Boolean {\n",
                       spaces(indent), "  return which() == ", scope, "Which.", upperCase,"\n",
                       spaces(indent), "}\n"),
@@ -942,7 +943,7 @@ private:
       case schema::Type::ENUM:
         kind = FieldKind::PRIMITIVE;
         if (defaultBody.getEnum() != 0) {
-          defaultMask = kj::str("(Short)", defaultBody.getEnum());
+          defaultMask = kj::str(defaultBody.getEnum(), ".toShort()");
         }
         break;
 
@@ -1008,7 +1009,7 @@ private:
             spaces(indent), "  fun set", titleCase, "(value: ", readerType,") {\n",
             unionDiscrim.set,
             (typeBody.which() == schema::Type::ENUM ?
-             kj::strTree(spaces(indent), "    _setShortField(", offset, ", (Short)value.ordinal()", defaultMaskParam, ")\n") :
+             kj::strTree(spaces(indent), "    _setShortField(", offset, ", value.ordinal.toShort()", defaultMaskParam, ")\n") :
              (typeBody.which() == schema::Type::VOID ?
               kj::strTree() :
               kj::strTree(spaces(indent), "    _set",
@@ -1331,14 +1332,14 @@ private:
       auto fields = schema.getUnionFields();
       return kj::strTree(
         spaces(indent), "fun which(): Which {\n",
-        spaces(indent+1), "when (_getShortField(",
+        spaces(indent+1), "return when (_getShortField(",
         schema.getProto().getStruct().getDiscriminantOffset(), ").toInt()) {\n",
         KJ_MAP(f, fields) {
           return kj::strTree(spaces(indent+2), f.getProto().getDiscriminantValue(), " -> ",
                              "Which.",
                              toUpperCase(f.getProto().getName()), "\n");
         },
-        spaces(indent+2), "default: return Which._NOT_IN_SCHEMA\n",
+        spaces(indent+2), "else -> Which._NOT_IN_SCHEMA\n",
         spaces(indent+1), "}\n",
         spaces(indent), "}\n"
         );
@@ -1400,8 +1401,8 @@ private:
         spaces(indent), "object ", name, " {\n",
         kj::strTree(
           spaces(indent), "  val STRUCT_SIZE: org.capnproto.StructSize =",
-          " org.capnproto.StructSize((Short)", structNode.getDataWordCount(),
-          ",(Short)", structNode.getPointerCount(), ")\n"),
+          " org.capnproto.StructSize(", structNode.getDataWordCount(),
+          ".toShort(), ", structNode.getPointerCount(), ".toShort())\n"),
 
         spaces(indent), "  class Factory", factoryTypeParams,
         " : org.capnproto.StructFactory<Builder", builderTypeParams, ", Reader", readerTypeParams, ">() {\n",
