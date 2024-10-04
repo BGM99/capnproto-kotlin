@@ -717,7 +717,7 @@ private:
   kj::StringTree makeEnumGetter(EnumSchema schema, uint offset, kj::String defaultMaskParam, int indent) {
     auto enumerants = schema.getEnumerants();
     return kj::strTree(
-      spaces(indent), "when (_getShortField(", offset, defaultMaskParam, ")) {\n",
+      spaces(indent), "when (_getShortField(", offset, defaultMaskParam, ").toInt()) {\n",
       KJ_MAP(e, enumerants) {
         return kj::strTree(spaces(indent+1), e.getOrdinal(), " -> ",
                            javaFullName(schema), ".",
@@ -1332,7 +1332,7 @@ private:
       return kj::strTree(
         spaces(indent), "fun which(): Which {\n",
         spaces(indent+1), "when (_getShortField(",
-        schema.getProto().getStruct().getDiscriminantOffset(), ")) {\n",
+        schema.getProto().getStruct().getDiscriminantOffset(), ").toInt()) {\n",
         KJ_MAP(f, fields) {
           return kj::strTree(spaces(indent+2), f.getProto().getDiscriminantValue(), " -> ",
                              "Which.",
@@ -1506,15 +1506,15 @@ private:
         structNode.getDiscriminantCount() == 0 ?
         kj::strTree() :
         kj::strTree(
-          spaces(indent), "  enum class Which {\n",
+          spaces(indent), "  enum class Which {\n", spaces(indent+2),
           KJ_MAP(f, structNode.getFields()) {
             if (hasDiscriminantValue(f)) {
-              return kj::strTree(spaces(indent), "    ", toUpperCase(f.getName()), ",");
+              return kj::strTree(toUpperCase(f.getName()), ", ");
             } else {
               return kj::strTree();
             }
           },
-          spaces(indent), "    _NOT_IN_SCHEMA,\n",
+          "_NOT_IN_SCHEMA\n",
           spaces(indent), "  }\n"),
         KJ_MAP(n, nestedTypeDecls) { return kj::mv(n); },
         spaces(indent), "}\n"
@@ -1782,11 +1782,11 @@ private:
 
         return NodeTextNoSchema {
           kj::strTree(
-            spaces(indent), "enum class ", name, " {\n",
+            spaces(indent), "enum class ", name, " {\n", spaces(indent+2),
             KJ_MAP(e, enumerants) {
-              return kj::strTree(spaces(indent), "  ", toUpperCase(e.getProto().getName()), ",");
+              return kj::strTree(toUpperCase(e.getProto().getName()), ", ");
             },
-            spaces(indent), "  _NOT_IN_SCHEMA,\n",
+            "_NOT_IN_SCHEMA\n",
             spaces(indent), "}\n"
             "\n"),
 
