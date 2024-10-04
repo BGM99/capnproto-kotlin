@@ -718,7 +718,7 @@ private:
   kj::StringTree makeEnumGetter(EnumSchema schema, uint offset, kj::String defaultMaskParam, int indent) {
     auto enumerants = schema.getEnumerants();
     return kj::strTree(
-      spaces(indent), "when (_getShortField(", offset, defaultMaskParam, ").toInt()) {\n",
+      spaces(indent), "return when (_getShortField(", offset, defaultMaskParam, ").toInt()) {\n",
       KJ_MAP(e, enumerants) {
         return kj::strTree(spaces(indent+1), e.getOrdinal(), " -> ",
                            javaFullName(schema), ".",
